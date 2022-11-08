@@ -29,20 +29,24 @@ Examples:
 import sys
 import time
 from grove.factory import Factory
+from grove.helper import SlotHelper
 
+class TempSensor:
+
+    def __init__(self):
+        sh = SlotHelper(SlotHelper.ADC)
+        pin = sh.argv2pin()
+        self.sensor = Factory.getTemper("NTC-ADC", pin)
+
+    def poll(self):
+        return self.sensor.temperature
 
 def main():
-    from grove.helper import SlotHelper
-    sh = SlotHelper(SlotHelper.ADC)
-    pin = sh.argv2pin()
-
-    sensor = Factory.getTemper("NTC-ADC", pin)
-
+    sensor = TempSensor()
     print('Detecting temperature...')
     while True:
         print('{} Celsius'.format(sensor.temperature))
         time.sleep(1)
-
 
 if __name__ == '__main__':
     main()
